@@ -29,11 +29,13 @@ const HelloWorldSceneAR = () => {
       <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
 
       <Viro3DObject
-        source={{ uri: 'https://github.com/andrewjb123/starter-kit/raw/master/rp_mei_posed_001_obj/rp_mei_posed_001_100k.fbx' }}
+        source={{
+          uri: 'https://github.com/andrewjb123/starter-kit/raw/master/rp_mei_posed_001_obj/rp_mei_posed_001_obj.vrx'
+        }}
 
         position={[0, -1, -2]}
         scale={[.01, .01, .01]}
-        type="FBX"
+        type="VRX"
         dragType="FixedDistance" onDrag={() => { }}
       />
     </ViroARScene>
