@@ -22,7 +22,7 @@ const HelloWorldSceneAR = (props) => {
   const [state, setState] = useState({
     foundAnchor: null,
     boxShown: true,
-    userPosition: [0, 0, 0]
+    velocity: [0, 0, 0]
   })
 
   const sceneRef = useRef(null)
@@ -31,18 +31,19 @@ const HelloWorldSceneAR = (props) => {
 
   }
 
-  const getDistance = (positionOne, positionTwo) => {
-    // Compute the difference vector between the two hit locations.
-    const dx = positionOne[0] - positionTwo[0];
-    const dy = positionOne[1] - positionTwo[1];
-    const dz = positionOne[2] - positionTwo[2];
+  const getVelocityLine = (startPosition, endPosition, speed) => {
 
-    // // Compute the straight-line distance.
-    const distanceMeters = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    const dx = endPosition[0] - startPosition[0]
+    const dy = endPosition[1] - startPosition[1]
+    const dz = endPosition[2] - startPosition[2]
 
-    console.log(distanceMeters * 100)
+    const d = Math.sqrt(dx * dx + dy * dy + dz * dz)
 
-    return distanceMeters
+    const vx = dx / d * speed
+    const vy = dy / d * speed
+    const vz = dz / d * speed
+
+    return [vx, vy, vz]
   }
 
   const fireButton = () => {
@@ -59,55 +60,29 @@ const HelloWorldSceneAR = (props) => {
 
     if (sceneRef.current) {
 
-      sceneRef
-        .current
-        .getCameraOrientationAsync().then((a) => {
-          console.log(a)
+      sceneRef.current.getCameraOrientationAsync().then((camera) => {
+        sceneRef.current.performARHitTestWithRay(camera.forward).then((results) => {
 
+          for (var i = 0; i < results.length; i++) {
 
-          sceneRef
-            .current
-            .performARHitTestWithRay(a.forward)
-            .then((results) => {
+            const result = results[i]
 
+            const startPosition = camera.position
+            const endPosition = result.transform.position
 
-              for (var i = 0; i < results.length; i++) {
+            setState((state) => ({
+              ...state,
+              boxShown: true,
+              velocity: getVelocityLine(startPosition, endPosition, 10),
+              boxLocation: startPosition
+            }))
 
-                const result = results[i]
-
-                const missileSpeed = 15
-
-                const dx = result.transform.position[0] - a.position[0]
-                const dy = result.transform.position[1] - a.position[1]
-                const dz = result.transform.position[2] - a.position[2]
-
-                const d = Math.sqrt(dx * dx + dy * dy + dz * dz)
-
-                const vx = dx / d * missileSpeed
-                const vy = dy / d * missileSpeed
-                const vz = dz / d * missileSpeed
-
-                setState((state) => ({
-                  ...state,
-                  boxShown: true,
-                  userPosition: [vx, vy, vz]
-                }))
-
-
-                setState((state) => ({
-                  ...state,
-                  boxLocation: a.position
-                }));
-
-                return;
-                //}
-              }
-
-            })
+            break
+          }
         })
+      })
     }
   }
-
 
   useEffect(() => {
     props.arSceneNavigator.viroAppProps.fireButton = fireButton
@@ -122,18 +97,18 @@ const HelloWorldSceneAR = (props) => {
   }
 
   const onAnchorRemoved = (anchor) => {
-    //console.log('onAnchorRemoved', anchor)
+    console.log('onAnchorRemoved', anchor)
 
     if (state.foundAnchor) {
       //  setState({ foundAnchor: null })
     }
   }
 
-  const onCollision = (a, b, c) => {
-    console.log('collision', a, b, c)
+  const onCollision = (tag, b, c) => {
+    console.log('Collision', tag, b, c)
     setState((state) => ({
       ...state,
-      boxShown: false
+      velocity: [0, 0, 0]
     }))
   }
 
@@ -144,60 +119,59 @@ const HelloWorldSceneAR = (props) => {
       onAnchorRemoved={(anchor) => { onAnchorRemoved(anchor) }}
       ref={(ref) => sceneRef.current = ref}>
 
-      {state.foundAnchor && <ViroARPlane anchorId={state.foundAnchor}>
+      {state.foundAnchor && (
+        <ViroARPlane anchorId={state.foundAnchor}>
+          <ViroNode onClick={(position, source) => console.log('Click', position, source)}>
+            <ViroAmbientLight color={"#aaaaaa"} />
+            <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
 
-        <ViroNode
-          onClick={(position, source) => console.log('Click', position, source)}>
+            <Viro3DObject
+              source={{
+                uri: 'https://github.com/andrewjb123/starter-kit/raw/master/rp_mei_posed_001_obj/rp_mei_posed_001_obj.vrx'
+              }}
+              position={[0, 0, 0]}
+              scale={[.009, .009, .009]}
+              type="VRX"
+              dragType="FixedToPlane"
+              onDrag={() => { }}
+              physicsBody={{
+                type: 'Static',
+                useGravity: false,
+                shape: { type: 'Box', params: [0.5, 3, 1] }
+              }}
+              viroTag="Target"
+            />
+          </ViroNode>
+        </ViroARPlane>)
+      }
 
-          <ViroAmbientLight color={"#aaaaaa"} />
-          <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
-
-          <Viro3DObject
-            source={{
-              uri: 'https://github.com/andrewjb123/starter-kit/raw/master/rp_mei_posed_001_obj/rp_mei_posed_001_obj.vrx'
-            }}
-            position={[0, 0, 0]}
-            scale={[.009, .009, .009]}
-            type="VRX"
-            dragType="FixedToPlane"
-            onDrag={() => { }}
+      {state.boxShown &&
+        (
+          <ViroBox
+            position={state.boxLocation}
+            scale={[.01, .01, .01]}
             physicsBody={{
               type: 'Dynamic',
-              useGravity: false,
-              mass: 10000,
-              shape: { type: 'Box', params: [0.4, 3, 1] }
+              useGravity: true,
+              mass: 5,
+              velocity: state.velocity,
+              //force: { position: state.boxLocation, value: [0, 0, 1] }
             }}
-            viroTag="MySpecialBox2"
+            viroTag="Ammo"
+            onCollision={onCollision}
           />
-        </ViroNode>
-      </ViroARPlane>}
-
-      {state.boxShown && <ViroBox
-        position={state.boxLocation}
-        scale={[.05, .05, .05]}
-        physicsBody={{
-          type: 'Dynamic',
-          useGravity: false,
-          friction: 1,
-          mass: 1,
-          velocity: state.userPosition
-        }}
-        viroTag="MySpecialBox"
-        onCollision={onCollision}
-      />}
+        )
+      }
 
     </ViroARScene>
-  );
-};
+  )
+}
 
 export default function ARControl(props) {
 
-
-  const [state, setState] = useState({
+  const [appProps, setAppProps] = useState({
     fireButton: null
   })
-
-  console.log('state', state)
 
   return (
     <View
@@ -207,19 +181,17 @@ export default function ARControl(props) {
         initialScene={{
           scene: HelloWorldSceneAR,
         }}
-        viroAppProps={state}
+        viroAppProps={appProps}
         style={styles.f1}
       />
 
-      <TouchableOpacity style={styles.fireButton} onPress={() => { if (state.fireButton) state.fireButton() }}>
+      <TouchableOpacity style={styles.fireButton} onPress={() => { if (appProps.fireButton) appProps.fireButton() }}>
         <Text>
           Fire
         </Text>
       </TouchableOpacity>
 
-      <View style={styles.crossHair}>
-
-      </View>
+      <View style={styles.crossHair} />
     </View>
   );
 };
@@ -247,10 +219,10 @@ var styles = StyleSheet.create({
   },
   crossHair: {
     position: 'absolute',
-    width: 10,
-    height: 10,
+    width: 5,
+    height: 5,
     backgroundColor: '#000',
-    top: (Dimensions.get('window').height / 2) - 5,
-    left: (Dimensions.get('window').width / 2) - 5
+    top: (Dimensions.get('window').height / 2) - 2.5,
+    left: (Dimensions.get('window').width / 2) - 2.5
   }
 });
