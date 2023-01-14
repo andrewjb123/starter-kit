@@ -10,7 +10,9 @@ import {
   ViroSpotLight,
   ViroNode,
   ViroARPlane,
-  ViroARPlaneSelector
+  ViroQuad,
+  ViroARPlaneSelector,
+  ViroMaterials
 } from '@viro-community/react-viro';
 
 
@@ -20,12 +22,34 @@ const HelloWorldSceneAR = (props) => {
   const Z_CEILING = 1
 
   const [state, setState] = useState({
-    foundAnchor: null,
-    boxShown: true,
-    velocity: [0, 0, 0]
+    foundAnchor: null
   })
 
   const sceneRef = useRef(null)
+  const ballRef = useRef(null)
+
+  const ballProperties = {
+    friction: 0.6,
+    type: 'Dynamic',
+    mass: 0.5,
+    enabled: true,
+    useGravity: true,
+    shape: { type: 'Sphere', params: [0.14] },
+    restitution: 0.15,
+    torque: [0, 0, 0]
+  }
+
+  ViroMaterials.createMaterials({
+    heart: {
+      lightingModel: "Blinn",
+      diffuseColor: '#ff00ff'
+    },
+    floor: {
+      lightingModel: "Blinn",
+      diffuseColor: '#000',
+      colorWriteMask: ['alpha']
+    },
+  });
 
   const onInitialized = (state, reason) => {
 
@@ -48,40 +72,35 @@ const HelloWorldSceneAR = (props) => {
 
   const fireButton = () => {
 
-    setState((state) => ({
-      ...state,
-      boxShown: false
-    }))
+    sceneRef.current.getCameraOrientationAsync().then((camera) => {
 
-    setState((state) => ({
-      ...state,
-      boxShown: true
-    }))
+      const startPosition = camera.position
+      const forward = camera.forward
 
-    if (sceneRef.current) {
+      sceneRef.current.performARHitTestWithRay(forward).then((results) => {
 
-      sceneRef.current.getCameraOrientationAsync().then((camera) => {
-        sceneRef.current.performARHitTestWithRay(camera.forward).then((results) => {
+        if (results.length === 0) {
+          return
+        }
+        ballRef.current.getTransformAsync().then((transform) => {
 
-          for (var i = 0; i < results.length; i++) {
+          const pos = transform.position;
 
-            const result = results[i]
+          const clickedPos = results[0].transform.position
 
-            const startPosition = camera.position
-            const endPosition = result.transform.position
+          const pushStrength = 5
+          const pushImpulse = [forward[0] * pushStrength, forward[1] * pushStrength, forward[2] * pushStrength]
 
-            setState((state) => ({
-              ...state,
-              boxShown: true,
-              velocity: getVelocityLine(startPosition, endPosition, 10),
-              boxLocation: startPosition
-            }))
+          const pushPosition = getVelocityLine(clickedPos, pos, 1)
 
-            break
-          }
+          ballRef.current.setNativeProps({ position: startPosition, rotation: [0, 0, 0] })
+          ballRef.current.setNativeProps({ "physicsBody": null })
+
+          ballRef.current.setNativeProps({ "physicsBody": ballProperties });
+          ballRef.current.applyImpulse(pushImpulse, pushPosition)
         })
       })
-    }
+    })
   }
 
   useEffect(() => {
@@ -106,11 +125,10 @@ const HelloWorldSceneAR = (props) => {
 
   const onCollision = (tag, b, c) => {
     console.log('Collision', tag, b, c)
-    setState((state) => ({
-      ...state,
-      velocity: [0, 0, 0]
-    }))
+
+
   }
+
 
   return (
     <ViroARScene
@@ -121,10 +139,11 @@ const HelloWorldSceneAR = (props) => {
 
       {state.foundAnchor && (
         <ViroARPlane anchorId={state.foundAnchor}>
-          <ViroNode onClick={(position, source) => console.log('Click', position, source)}>
-            <ViroAmbientLight color={"#aaaaaa"} />
-            <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
 
+          <ViroAmbientLight color={"#bbb"} />
+          <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
+
+          <ViroNode onClick={(position, source) => console.log('Click', position, source)}>
             <Viro3DObject
               source={{
                 uri: 'https://github.com/andrewjb123/starter-kit/raw/master/rp_mei_posed_001_obj/rp_mei_posed_001_obj.vrx'
@@ -142,26 +161,33 @@ const HelloWorldSceneAR = (props) => {
               viroTag="Target"
             />
           </ViroNode>
+
+
+          <ViroBox
+            position={[0, 0, -1]}
+            scale={[4.0, 4.0, 0.01]}
+            rotation={[-90, 0, 0]}
+            dragType="FixedToPlane"
+            physicsBody={{
+              type: "Static",
+              useGravity: false,
+              mass: 0
+            }}
+            viroTag="Flooring"
+            materials={['floor']}
+          />
+
         </ViroARPlane>)
       }
 
-      {state.boxShown &&
-        (
-          <ViroBox
-            position={state.boxLocation}
-            scale={[.01, .01, .01]}
-            physicsBody={{
-              type: 'Dynamic',
-              useGravity: true,
-              mass: 5,
-              velocity: state.velocity,
-              //force: { position: state.boxLocation, value: [0, 0, 1] }
-            }}
-            viroTag="Ammo"
-            onCollision={onCollision}
-          />
-        )
-      }
+      <ViroBox
+        ref={(obj) => { ballRef.current = obj }}
+        scale={[.01, .01, .01]}
+        physicsBody={ballProperties}
+        viroTag="Ammo"
+        onCollision={onCollision}
+        materials={['heart']}
+      />
 
     </ViroARScene>
   )
