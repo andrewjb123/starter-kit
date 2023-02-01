@@ -26,10 +26,55 @@ const HelloWorldSceneAR = (props) => {
   })
 
   const sceneRef = useRef(null)
-  const ballRef = useRef(null)
+  //const ballRef = useRef(null)
+
+  const ballIndex = useRef(0)
+
+  const balls = useRef([
+    {
+      ref: null,
+      index: 0
+    },
+    {
+      ref: null,
+      index: 1
+    },
+    {
+      ref: null,
+      index: 2
+    },
+    {
+      ref: null,
+      index: 3
+    },
+    {
+      ref: null,
+      index: 4
+    },
+    {
+      ref: null,
+      index: 5
+    },
+    {
+      ref: null,
+      index: 6
+    },
+    {
+      ref: null,
+      index: 7
+    },
+    {
+      ref: null,
+      index: 8
+    },
+    {
+      ref: null,
+      index: 9
+    }
+  ])
 
   const ballProperties = {
-    friction: 0.6,
+    friction: 1.6,
     type: 'Dynamic',
     mass: 0.5,
     enabled: true,
@@ -42,7 +87,7 @@ const HelloWorldSceneAR = (props) => {
   ViroMaterials.createMaterials({
     heart: {
       lightingModel: "Blinn",
-      diffuseColor: '#ff00ff'
+      diffuseColor: '#ffff00'
     },
     floor: {
       lightingModel: "Blinn",
@@ -82,7 +127,7 @@ const HelloWorldSceneAR = (props) => {
         if (results.length === 0) {
           return
         }
-        ballRef.current.getTransformAsync().then((transform) => {
+        balls.current[ballIndex.current].ref.getTransformAsync().then((transform) => {
 
           const pos = transform.position;
 
@@ -93,11 +138,17 @@ const HelloWorldSceneAR = (props) => {
 
           const pushPosition = getVelocityLine(clickedPos, pos, 1)
 
-          ballRef.current.setNativeProps({ position: startPosition, rotation: [0, 0, 0] })
-          ballRef.current.setNativeProps({ "physicsBody": null })
+          balls.current[ballIndex.current].ref.setNativeProps({ position: startPosition, rotation: [0, 0, 0] })
+          balls.current[ballIndex.current].ref.setNativeProps({ "physicsBody": null })
 
-          ballRef.current.setNativeProps({ "physicsBody": ballProperties });
-          ballRef.current.applyImpulse(pushImpulse, pushPosition)
+          balls.current[ballIndex.current].ref.setNativeProps({ "physicsBody": ballProperties });
+          balls.current[ballIndex.current].ref.applyImpulse(pushImpulse, pushPosition)
+
+          ballIndex.current++
+
+          if (ballIndex.current == balls.current.length) {
+            ballIndex.current = 0
+          }
         })
       })
     })
@@ -162,7 +213,6 @@ const HelloWorldSceneAR = (props) => {
             />
           </ViroNode>
 
-
           <ViroBox
             position={[0, 0, -1]}
             scale={[4.0, 4.0, 0.01]}
@@ -180,14 +230,32 @@ const HelloWorldSceneAR = (props) => {
         </ViroARPlane>)
       }
 
-      <ViroBox
-        ref={(obj) => { ballRef.current = obj }}
-        scale={[.01, .01, .01]}
-        physicsBody={ballProperties}
-        viroTag="Ammo"
-        onCollision={onCollision}
-        materials={['heart']}
-      />
+      {
+        balls.current.map(b =>
+          <ViroBox
+            key={"Ammo_" + b.index}
+            ref={(obj) => { b.ref = obj }}
+            scale={[.01, .01, .01]}
+            physicsBody={ballProperties}
+            viroTag={"Ammo_" + b.index}
+            onCollision={onCollision}
+            materials={['heart']}
+          />
+        )
+      }
+
+      {
+        /*
+        <ViroBox
+          ref={(obj) => { ballRef.current = obj }}
+          scale={[.01, .01, .01]}
+          physicsBody={ballProperties}
+          viroTag="Ammo"
+          onCollision={onCollision}
+          materials={['heart']}
+        />
+        */
+      }
 
     </ViroARScene>
   )
@@ -212,9 +280,7 @@ export default function ARControl(props) {
       />
 
       <TouchableOpacity style={styles.fireButton} onPress={() => { if (appProps.fireButton) appProps.fireButton() }}>
-        <Text>
-          Fire
-        </Text>
+
       </TouchableOpacity>
 
       <View style={styles.crossHair} />
@@ -237,11 +303,12 @@ var styles = StyleSheet.create({
   },
   fireButton: {
     position: 'absolute',
-    bottom: 100,
+    bottom: 50,
     height: 100,
     width: 100,
     left: (Dimensions.get('window').width / 2) - 50,
-    backgroundColor: '#fff'
+    backgroundColor: '#000',
+    borderRadius: 80
   },
   crossHair: {
     position: 'absolute',
