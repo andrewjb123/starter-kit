@@ -194,7 +194,7 @@ const HelloWorldSceneAR = (props) => {
           <ViroAmbientLight color={"#bbb"} />
           <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
 
-          <ViroNode onClick={(position, source) => console.log('Click', position, source)}>
+          {/*<ViroNode onClick={(position, source) => console.log('Click', position, source)}>
             <Viro3DObject
               source={{
                 uri: 'https://github.com/andrewjb123/starter-kit/raw/master/rp_mei_posed_001_obj/rp_mei_posed_001_obj.vrx'
@@ -211,7 +211,24 @@ const HelloWorldSceneAR = (props) => {
               }}
               viroTag="Target"
             />
-          </ViroNode>
+            </ViroNode>*/}
+
+          <Viro3DObject
+            source={{
+              uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx'
+            }}
+            position={[0, 1, -1]}
+            scale={[.009, .009, .009]}
+            type="VRX"
+            dragType="FixedToPlane"
+            onDrag={() => { }}
+            physicsBody={{
+              type: 'Static',
+              useGravity: false,
+              shape: { type: 'Box', params: [0.5, 3, 1] }
+            }}
+            viroTag="Plane"
+          />
 
           <ViroBox
             position={[0, 0, -1]}
