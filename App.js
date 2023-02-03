@@ -12,7 +12,8 @@ import {
   ViroARPlane,
   ViroQuad,
   ViroARPlaneSelector,
-  ViroMaterials
+  ViroMaterials,
+  ViroAnimations
 } from '@viro-community/react-viro';
 
 
@@ -73,12 +74,33 @@ const HelloWorldSceneAR = (props) => {
     }
   ])
 
+  const objects = useRef([
+    {
+      uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+      tag: 'Plane1',
+      ref: null,
+      position: [0, 1, 0],
+      rotation: [0, 0, 0],
+      scale: [.0003, .0003, .0003],
+      shape: [0.4, 0.4, 0.4]
+    },
+    {
+      uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+      tag: 'Plane2',
+      ref: null,
+      position: [0.2, 1.2, 1.4],
+      rotation: [0, 0, 0],
+      scale: [.0003, .0003, .0003],
+      shape: [0.4, 0.4, 0.4]
+    }
+  ])
+
   const ballProperties = {
     friction: 1.6,
     type: 'Dynamic',
     mass: 0.5,
     enabled: true,
-    useGravity: true,
+    useGravity: false,
     shape: { type: 'Sphere', params: [0.14] },
     restitution: 0.15,
     torque: [0, 0, 0]
@@ -87,11 +109,9 @@ const HelloWorldSceneAR = (props) => {
   ViroMaterials.createMaterials({
     heart: {
       lightingModel: "Blinn",
-      diffuseColor: '#ffff00'
+      diffuseColor: '#000'
     },
     floor: {
-      lightingModel: "Blinn",
-      diffuseColor: '#000',
       colorWriteMask: ['alpha']
     },
   });
@@ -180,6 +200,35 @@ const HelloWorldSceneAR = (props) => {
 
   }
 
+  ViroAnimations.registerAnimations({
+    flight1: {
+      properties: {
+        positionZ: "+=0.2",
+        positionX: "+=1.2",
+        rotateY: "+=180"
+      },
+      easing: "Linear",
+      duration: 10000
+    },
+    flight2: {
+      properties: {
+        positionZ: "-=0.2",
+        positionX: "-=1.2",
+        rotateY: "+=180"
+      },
+      easing: "Linear",
+      duration: 10000
+    },
+    flight: [
+      ["flight1", "flight2"]
+    ]
+  })
+
+
+
+  const handleAninimationFinished = (object) => {
+    //object.ref.
+  }
 
   return (
     <ViroARScene
@@ -213,22 +262,64 @@ const HelloWorldSceneAR = (props) => {
             />
             </ViroNode>*/}
 
-          <Viro3DObject
-            source={{
-              uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx'
-            }}
-            position={[0, 1, -1]}
-            scale={[.009, .009, .009]}
-            type="VRX"
-            dragType="FixedToPlane"
-            onDrag={() => { }}
-            physicsBody={{
-              type: 'Static',
-              useGravity: false,
-              shape: { type: 'Box', params: [0.5, 3, 1] }
-            }}
-            viroTag="Plane"
-          />
+          {
+            objects.current.map(o =>
+              <ViroNode
+                key={o.tag}
+                onClick={(position, source) => console.log('Click', position, source)}
+                animation={
+                  {
+                    name: 'flight',
+                    run: true,
+                    loop: true,
+                    onFinish: () => handleAninimationFinished(o)
+                  }
+                }>
+
+                <Viro3DObject
+                  ref={(ref) => o.ref = ref}
+                  source={{
+                    uri: o.uri
+                  }}
+                  position={o.position}
+                  scale={o.scale}
+                  rotation={o.rotation}
+                  type="VRX"
+                  dragType="FixedToPlane"
+                  onDrag={() => { }}
+                  physicsBody={{
+                    type: "Static",
+                    useGravity: false,
+                    mass: 0
+                  }}
+                />
+
+              </ViroNode>
+            )
+
+            /*
+                <ViroBox
+                  position={o.position}
+                  scale={[0.1, 0.1, 0.1]}
+                  rotation={o.rotation}
+                  physicsBody={{
+                    type: "Static",
+                    useGravity: false,
+                    mass: 0
+                  }}
+                  viroTag={o.tag}
+                  materials={['floor']}
+                />
+
+
+                  physicsBody={{
+                    type: 'Static',
+                    useGravity: false,
+                    shape: { type: 'Box', params: o.shape }
+                  }}
+                  */
+          }
+
 
           <ViroBox
             position={[0, 0, -1]}
@@ -274,7 +365,7 @@ const HelloWorldSceneAR = (props) => {
         */
       }
 
-    </ViroARScene>
+    </ViroARScene >
   )
 }
 
