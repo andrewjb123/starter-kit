@@ -27,72 +27,19 @@ const HelloWorldSceneAR = (props) => {
   })
 
   const sceneRef = useRef(null)
-  //const ballRef = useRef(null)
 
   const ballIndex = useRef(0)
-
   const balls = useRef([
-    {
-      ref: null,
-      index: 0
-    },
-    {
-      ref: null,
-      index: 1
-    },
-    {
-      ref: null,
-      index: 2
-    },
-    {
-      ref: null,
-      index: 3
-    },
-    {
-      ref: null,
-      index: 4
-    },
-    {
-      ref: null,
-      index: 5
-    },
-    {
-      ref: null,
-      index: 6
-    },
-    {
-      ref: null,
-      index: 7
-    },
-    {
-      ref: null,
-      index: 8
-    },
-    {
-      ref: null,
-      index: 9
-    }
-  ])
-
-  const objects = useRef([
-    {
-      uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
-      tag: 'Plane1',
-      ref: null,
-      position: [0, 1, 0],
-      rotation: [0, 0, 0],
-      scale: [.0003, .0003, .0003],
-      shape: [0.4, 0.4, 0.4]
-    },
-    {
-      uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
-      tag: 'Plane2',
-      ref: null,
-      position: [0.2, 1.2, 1.4],
-      rotation: [0, 0, 0],
-      scale: [.0003, .0003, .0003],
-      shape: [0.4, 0.4, 0.4]
-    }
+    { ref: null, index: 0, visible: false },
+    { ref: null, index: 1, visible: false },
+    { ref: null, index: 2, visible: false },
+    { ref: null, index: 3, visible: false },
+    { ref: null, index: 4, visible: false },
+    { ref: null, index: 5, visible: false },
+    { ref: null, index: 6, visible: false },
+    { ref: null, index: 7, visible: false },
+    { ref: null, index: 8, visible: false },
+    { ref: null, index: 9, visible: false }
   ])
 
   const ballProperties = {
@@ -106,19 +53,46 @@ const HelloWorldSceneAR = (props) => {
     torque: [0, 0, 0]
   }
 
-  ViroMaterials.createMaterials({
-    heart: {
-      lightingModel: "Blinn",
-      diffuseColor: '#000'
+  const objects = useRef([
+    {
+      uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+      tag: 'Plane1',
+      ref: null,
+      position: [0, 1, 0],
+      rotation: [0, 0, 0],
+      scale: [.0003, .0003, .0003],
+      animation: {
+        run: true,
+        loop: true,
+        name: 'flight1'
+      },
+      physics: {
+        type: "Static",
+        useGravity: false,
+        mass: 0,
+        shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+      }
     },
-    floor: {
-      colorWriteMask: ['alpha']
-    },
-  });
-
-  const onInitialized = (state, reason) => {
-
-  }
+    {
+      uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+      tag: 'Plane2',
+      ref: null,
+      position: [0, 1.3, 1.8],
+      rotation: [0, 90, 0],
+      scale: [.0003, .0003, .0003],
+      animation: {
+        run: true,
+        loop: true,
+        name: 'flight2'
+      },
+      physics: {
+        type: "Static",
+        useGravity: false,
+        mass: 0,
+        shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+      }
+    }
+  ])
 
   const getVelocityLine = (startPosition, endPosition, speed) => {
 
@@ -137,6 +111,8 @@ const HelloWorldSceneAR = (props) => {
 
   const fireButton = () => {
 
+    balls.current[ballIndex.current].visible = true
+
     sceneRef.current.getCameraOrientationAsync().then((camera) => {
 
       const startPosition = camera.position
@@ -147,6 +123,7 @@ const HelloWorldSceneAR = (props) => {
         if (results.length === 0) {
           return
         }
+
         balls.current[ballIndex.current].ref.getTransformAsync().then((transform) => {
 
           const pos = transform.position;
@@ -160,7 +137,6 @@ const HelloWorldSceneAR = (props) => {
 
           balls.current[ballIndex.current].ref.setNativeProps({ position: startPosition, rotation: [0, 0, 0] })
           balls.current[ballIndex.current].ref.setNativeProps({ "physicsBody": null })
-
           balls.current[ballIndex.current].ref.setNativeProps({ "physicsBody": ballProperties });
           balls.current[ballIndex.current].ref.applyImpulse(pushImpulse, pushPosition)
 
@@ -174,9 +150,45 @@ const HelloWorldSceneAR = (props) => {
     })
   }
 
+  ViroMaterials.createMaterials({
+    heart: {
+      lightingModel: "Blinn",
+      diffuseColor: '#000'
+    },
+    floor: {
+      colorWriteMask: ['alpha']
+    },
+  })
+
+  ViroAnimations.registerAnimations({
+    flight1: {
+      properties: {
+        positionZ: "+=0.0008",
+        positionY: "+=0.0010",
+        positionX: "-=0.0010"
+      },
+      easing: "Linear",
+      duration: 1
+    },
+    flight2: {
+      properties: {
+        positionZ: "+=0.0008",
+        positionY: "-=0.0006",
+        positionX: "+=0.0010"
+      },
+      easing: "Linear",
+      duration: 1
+    }
+  })
+
+
   useEffect(() => {
     props.arSceneNavigator.viroAppProps.fireButton = fireButton
   }, [])
+
+  const onInitialized = (state, reason) => {
+
+  }
 
   const onAnchorFound = (anchor) => {
     console.log('onAnchorFound', anchor)
@@ -197,37 +209,6 @@ const HelloWorldSceneAR = (props) => {
   const onCollision = (tag, b, c) => {
     console.log('Collision', tag, b, c)
 
-
-  }
-
-  ViroAnimations.registerAnimations({
-    flight1: {
-      properties: {
-        positionZ: "+=0.2",
-        positionX: "+=1.2",
-        rotateY: "+=180"
-      },
-      easing: "Linear",
-      duration: 10000
-    },
-    flight2: {
-      properties: {
-        positionZ: "-=0.2",
-        positionX: "-=1.2",
-        rotateY: "+=180"
-      },
-      easing: "Linear",
-      duration: 10000
-    },
-    flight: [
-      ["flight1", "flight2"]
-    ]
-  })
-
-
-
-  const handleAninimationFinished = (object) => {
-    //object.ref.
   }
 
   return (
@@ -264,37 +245,21 @@ const HelloWorldSceneAR = (props) => {
 
           {
             objects.current.map(o =>
-              <ViroNode
+              <Viro3DObject
                 key={o.tag}
-                onClick={(position, source) => console.log('Click', position, source)}
-                animation={
-                  {
-                    name: 'flight',
-                    run: true,
-                    loop: true,
-                    onFinish: () => handleAninimationFinished(o)
-                  }
-                }>
-
-                <Viro3DObject
-                  ref={(ref) => o.ref = ref}
-                  source={{
-                    uri: o.uri
-                  }}
-                  position={o.position}
-                  scale={o.scale}
-                  rotation={o.rotation}
-                  type="VRX"
-                  dragType="FixedToPlane"
-                  onDrag={() => { }}
-                  physicsBody={{
-                    type: "Static",
-                    useGravity: false,
-                    mass: 0
-                  }}
-                />
-
-              </ViroNode>
+                ref={(ref) => o.ref = ref}
+                source={{
+                  uri: o.uri
+                }}
+                position={o.position}
+                scale={o.scale}
+                rotation={o.rotation}
+                type="VRX"
+                dragType="FixedToPlane"
+                physicsBody={o.physics}
+                tag={o.tag}
+                animation={o.animation}
+              />
             )
 
             /*
@@ -352,20 +317,7 @@ const HelloWorldSceneAR = (props) => {
         )
       }
 
-      {
-        /*
-        <ViroBox
-          ref={(obj) => { ballRef.current = obj }}
-          scale={[.01, .01, .01]}
-          physicsBody={ballProperties}
-          viroTag="Ammo"
-          onCollision={onCollision}
-          materials={['heart']}
-        />
-        */
-      }
-
-    </ViroARScene >
+    </ViroARScene>
   )
 }
 
@@ -394,7 +346,7 @@ export default function ARControl(props) {
       <View style={styles.crossHair} />
     </View>
   );
-};
+}
 
 var styles = StyleSheet.create({
   f1: {
@@ -426,4 +378,4 @@ var styles = StyleSheet.create({
     top: (Dimensions.get('window').height / 2) - 2.5,
     left: (Dimensions.get('window').width / 2) - 2.5
   }
-});
+})
