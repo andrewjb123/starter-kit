@@ -12,7 +12,7 @@ import {
     ViroAnimations
 } from '@viro-community/react-viro';
 
-const FloatFireSceneAR = (props) => {
+const FloatWindSceneAR = (props) => {
 
     const viroProps = props.arSceneNavigator.viroAppProps
     const gameProps = viroProps.gameProps
@@ -212,4 +212,4 @@ const FloatFireSceneAR = (props) => {
     )
 }
 
-export default FloatFireSceneAR
+export default FloatWindSceneAR
