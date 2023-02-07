@@ -49,12 +49,12 @@ export default function ARControl(props) {
     },
     objects: [
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/blob/master/balloon/balloon.vrx',
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/balloon.vrx',
         tag: 'Balloon1',
         ref: null,
         position: [0, 1, 0],
         rotation: [0, 0, 0],
-        scale: [3, 3, 3],
+        scale: [.0003, .0003, .0003],
         animation: {
           run: true,
           loop: true,
@@ -68,7 +68,7 @@ export default function ARControl(props) {
         }
       },
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/blob/master/balloon/balloon.vrx',
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/balloon.vrx',
         tag: 'Balloon2',
         ref: null,
         position: [0, 1.3, 1.8],
