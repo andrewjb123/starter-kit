@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import { View, StyleSheet, PixelRatio, Dimensions, TouchableOpacity, Text } from 'react-native'
 import { ViroARSceneNavigator } from '@viro-community/react-viro'
 import FloatFireScene from './scenes/FloatFireScene'
+import FloatWindScene from './scenes/FloatWindScene'
 
 export default function ARControl(props) {
 
-  const gameProps1 = {
+  const gameProps2 = {
     ammoStrength: 5,
     materials: {
       ball: {
@@ -48,12 +49,12 @@ export default function ARControl(props) {
     },
     objects: [
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
-        tag: 'Plane1',
+        uri: 'https://github.com/andrewjb123/starter-kit/blob/master/balloon/balloon.vrx',
+        tag: 'Balloon1',
         ref: null,
         position: [0, 1, 0],
         rotation: [0, 0, 0],
-        scale: [.0003, .0003, .0003],
+        scale: [3, 3, 3],
         animation: {
           run: true,
           loop: true,
@@ -67,8 +68,8 @@ export default function ARControl(props) {
         }
       },
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
-        tag: 'Plane2',
+        uri: 'https://github.com/andrewjb123/starter-kit/blob/master/balloon/balloon.vrx',
+        tag: 'Balloon2',
         ref: null,
         position: [0, 1.3, 1.8],
         rotation: [0, 90, 0],
@@ -89,7 +90,7 @@ export default function ARControl(props) {
   }
 
 
-  const gameProps2 = {
+  const gameProps1 = {
     ammoStrength: 5,
     materials: {
       ball: {
@@ -198,7 +199,7 @@ export default function ARControl(props) {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{
-          scene: FloatWindSceneAR,
+          scene: FloatWindScene,
         }}
         viroAppProps={appProps}
         style={styles.container}
