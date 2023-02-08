@@ -49,7 +49,7 @@ export default function ARControl(props) {
     },
     objects: [
       {
-        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fballon.vrx?alt=media&token=24ced34d-2b6e-4138-889e-58ab6644b07a',
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/ballon.vrx',
         resources:
           [
             /*{ uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2F6e0c84fe7d202c3ac87b0c7f654fce74bf99881c.png?alt=media' },
@@ -77,7 +77,7 @@ export default function ARControl(props) {
         }
       },
       {
-        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fballon.vrx?alt=media&token=24ced34d-2b6e-4138-889e-58ab6644b07a',
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/ballon.vrx',
         resources:
           [
             /*{ uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2F6e0c84fe7d202c3ac87b0c7f654fce74bf99881c.png?alt=media' },
@@ -206,7 +206,7 @@ export default function ARControl(props) {
 
   const [appProps, setAppProps] = useState({
     fireButton: null,
-    gameProps: gameProps1,
+    gameProps: gameProps2,
     onFireButtonAssigned: onFireButtonAssigned,
     onCollision: onCollision
   })
