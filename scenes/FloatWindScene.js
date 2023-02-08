@@ -160,7 +160,6 @@ const FloatWindSceneAR = (props) => {
                                     source={{
                                         uri: o.uri
                                     }}
-                                    resources={o.resources}
                                     position={o.position}
                                     scale={o.scale}
                                     rotation={o.rotation}
