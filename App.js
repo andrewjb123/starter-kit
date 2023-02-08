@@ -49,7 +49,17 @@ export default function ARControl(props) {
     },
     objects: [
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/balloon.vrx',
+        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fballoon.vrx?alt=media',
+        resources:
+          [
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2FCube%20Base%20Color.jpg?alt=media' },
+            /*{ uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2F6e0c84fe7d202c3ac87b0c7f654fce74bf99881c.png?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fbdb3d95033b62647d04a45566d4119de2b4f3325.png?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_diff_8k.jpg?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_disp_8k.jpg?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_nor_8k.jpg?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_rough_8k.jpg?alt=media' }
+          */],
         tag: 'Balloon1',
         ref: null,
         position: [0, 1, 0],
@@ -68,7 +78,17 @@ export default function ARControl(props) {
         }
       },
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/balloon.vrx',
+        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fballoon.vrx?alt=media',
+        resources:
+          [
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2FCube%20Base%20Color.jpg?alt=media' },
+            /*{ uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2F6e0c84fe7d202c3ac87b0c7f654fce74bf99881c.png?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fbdb3d95033b62647d04a45566d4119de2b4f3325.png?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_diff_8k.jpg?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_disp_8k.jpg?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_nor_8k.jpg?alt=media' },
+            { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_rough_8k.jpg?alt=media' }
+          */],
         tag: 'Balloon2',
         ref: null,
         position: [0, 1.3, 1.8],
@@ -133,7 +153,7 @@ export default function ARControl(props) {
     },
     objects: [
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fplane%2Fplane.vrx?alt=media',
         tag: 'Plane1',
         ref: null,
         position: [0, 1, 0],
@@ -152,7 +172,7 @@ export default function ARControl(props) {
         }
       },
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fplane%2Fplane.vrx?alt=media',
         tag: 'Plane2',
         ref: null,
         position: [0, 1.3, 1.8],
