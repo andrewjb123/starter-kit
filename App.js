@@ -49,9 +49,11 @@ export default function ARControl(props) {
     },
     objects: [
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/ballon.vrx',
+        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fballon.vrx?alt=media&token=24ced34d-2b6e-4138-889e-58ab6644b07a',
         resources:
           [
+            { uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/Cube Base Color.jpg' },
+            { uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/Loft Base Color.jpg' }
             /*{ uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2F6e0c84fe7d202c3ac87b0c7f654fce74bf99881c.png?alt=media' },
             { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fbdb3d95033b62647d04a45566d4119de2b4f3325.png?alt=media' },
             { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_diff_8k.jpg?alt=media' },
@@ -77,9 +79,11 @@ export default function ARControl(props) {
         }
       },
       {
-        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/ballon.vrx',
+        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fballon.vrx?alt=media&token=24ced34d-2b6e-4138-889e-58ab6644b07a',
         resources:
           [
+            { uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/Cube Base Color.jpg' },
+            { uri: 'https://github.com/andrewjb123/starter-kit/raw/master/balloon/Loft Base Color.jpg' }
             /*{ uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2F6e0c84fe7d202c3ac87b0c7f654fce74bf99881c.png?alt=media' },
             { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Fbdb3d95033b62647d04a45566d4119de2b4f3325.png?alt=media' },
             { uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fballoon%2Faerial_beach_01_diff_8k.jpg?alt=media' },
