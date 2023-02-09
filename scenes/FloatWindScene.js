@@ -149,17 +149,8 @@ const FloatWindSceneAR = (props) => {
             {state.foundAnchor && (
                 <ViroARPlane anchorId={state.foundAnchor}>
 
-                    {/*
                     <ViroAmbientLight color={"#bbb"} />
-                    <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true}
-                    />
-            */}
-
-                    <ViroDirectionalLight
-                        color="#ffffff"
-                        direction={[0, -1, 0]}
-                    />
-
+                    <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
 
                     {
                         objects.current.map(o =>
@@ -170,7 +161,6 @@ const FloatWindSceneAR = (props) => {
                                     source={{
                                         uri: o.uri
                                     }}
-                                    resources={o.resources}
                                     position={o.position}
                                     scale={o.scale}
                                     rotation={o.rotation}
