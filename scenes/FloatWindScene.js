@@ -183,8 +183,7 @@ const FloatWindSceneAR = (props) => {
                         dragType="FixedToPlane"
                         physicsBody={{
                             type: "Static",
-                            useGravity: false,
-                            mass: 0
+                            useGravity: false
                         }}
                         materials={['floor']}
                     />

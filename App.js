@@ -72,7 +72,6 @@ export default function ARControl(props) {
         physics: {
           type: "Static",
           useGravity: false,
-          mass: 0,
           shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
         }
       },
@@ -100,7 +99,6 @@ export default function ARControl(props) {
         physics: {
           type: "Static",
           useGravity: false,
-          mass: 0,
           shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
         }
       }
@@ -165,7 +163,6 @@ export default function ARControl(props) {
         physics: {
           type: "Static",
           useGravity: false,
-          mass: 0,
           shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
         }
       },
@@ -184,7 +181,6 @@ export default function ARControl(props) {
         physics: {
           type: "Static",
           useGravity: false,
-          mass: 0,
           shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
         }
       }
