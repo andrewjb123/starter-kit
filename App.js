@@ -129,14 +129,17 @@ export default function ARControl(props) {
       restitution: 0.15,
       torque: [0, 0, 0]
     },
-    objects: [
+    objects1: [
       {
-        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fplane%2Fplane.vrx?alt=media',
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
         tag: 'Plane1',
         ref: null,
         position: [0, 1, 0],
         rotation: [0, 0, 0],
-        scale: [.0003, .0003, .0003],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
         animation: {
           run: true,
           loop: true,
@@ -149,12 +152,292 @@ export default function ARControl(props) {
         }
       },
       {
-        uri: 'https://firebasestorage.googleapis.com/v0/b/tour-2e13f.appspot.com/o/3dmodels%2Fplane%2Fplane.vrx?alt=media',
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
         tag: 'Plane2',
         ref: null,
         position: [0, 1.3, 1.8],
         rotation: [0, 90, 0],
-        scale: [.0003, .0003, .0003],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight2'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane3',
+        ref: null,
+        position: [0, 1.3, -1.8],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight2'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane4',
+        ref: null,
+        position: [-1, 1.3, 1.8],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight1'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane5',
+        ref: null,
+        position: [-1, 1.1, 0],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight2'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      }
+    ],
+    objects2: [
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane6',
+        ref: null,
+        position: [0, 1, 0],
+        rotation: [0, 0, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight1'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane6',
+        ref: null,
+        position: [0, 1.3, 1.8],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight2'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane8',
+        ref: null,
+        position: [0, 1.3, -1.8],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight2'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane9',
+        ref: null,
+        position: [-1, 1.3, 1.8],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight1'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane10',
+        ref: null,
+        position: [-1, 1.1, 0],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight2'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      }
+    ],
+    objects3: [
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane11',
+        ref: null,
+        position: [0, 1, 0],
+        rotation: [0, 0, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight1'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane12',
+        ref: null,
+        position: [0, 1.3, 1.8],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight2'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane13',
+        ref: null,
+        position: [0, 1.3, -1.8],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight2'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane14',
+        ref: null,
+        position: [-1, 1.3, 1.8],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
+        animation: {
+          run: true,
+          loop: true,
+          name: 'flight1'
+        },
+        physics: {
+          type: "Static",
+          useGravity: false,
+          shape: { type: 'Box', params: [0.05, 0.05, 0.05] }
+        }
+      },
+      {
+        uri: 'https://github.com/andrewjb123/starter-kit/raw/master/plane/plane.vrx',
+        tag: 'Plane15',
+        ref: null,
+        position: [-1, 1.1, 0],
+        rotation: [0, 90, 0],
+        scale: [.0006, .0006, .0006],
+        lifeSpan: 10000,
+        maxHits: 10,
+        currentHits: 0,
         animation: {
           run: true,
           loop: true,
@@ -184,7 +467,7 @@ export default function ARControl(props) {
 
   const [appProps, setAppProps] = useState({
     fireButton: null,
-    gameProps: gameProps2,
+    gameProps: gameProps1,
     onFireButtonAssigned: onFireButtonAssigned,
     onCollision: onCollision
   })
@@ -195,7 +478,7 @@ export default function ARControl(props) {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{
-          scene: FloatWindScene,
+          scene: FloatFireScene,
         }}
         viroAppProps={appProps}
         style={styles.container}

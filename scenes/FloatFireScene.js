@@ -26,7 +26,14 @@ const FloatFireSceneAR = (props) => {
 
     const sceneRef = useRef(null)
 
-    const objects = useRef(gameProps.objects)
+    const [objects1, setObjects1] = useState(gameProps.objects1 ? gameProps.objects1 : [])
+    const [objects2, setObjects2] = useState(gameProps.objects2 ? gameProps.objects2 : [])
+    const [objects3, setObjects3] = useState(gameProps.objects3 ? gameProps.objects3 : [])
+
+    const [showObjects1, setShowObjects1] = useState(true)
+    const [showObjects2, setShowObjects2] = useState(false)
+    const [showObjects3, setShowObjects3] = useState(false)
+
     const ballPhysics = gameProps.ballPhysics
 
     ViroMaterials.createMaterials(gameProps.materials)
@@ -45,6 +52,91 @@ const FloatFireSceneAR = (props) => {
         { index: 8, ref: null, visible: false },
         { index: 9, ref: null, visible: false }
     ])
+
+
+    useEffect(() => {
+        const combinedObjects = [].concat(objects1).concat(objects2).concat(objects3)
+
+        for (let o in combinedObjects) {
+            const object = combinedObjects[o]
+
+            object.id = guidGenerator()
+            object.visible = true
+
+            object.dynamicPosition = [object.position[0], object.position[1], object.position[2]]
+            object.dynamicScale = [object.scale[0], object.scale[1], object.scale[2]]
+            object.dynamicRotation = [object.rotation[0], object.rotation[1], object.rotation[2]]
+        }
+
+        const switchInterval = setInterval(() => {
+            if (showObjects1) {
+                setShowObjects1((prev) => !prev)
+                setShowObjects2((prev) => !prev)
+
+
+                for (let o in objects3) {
+                    const object = objects3[o]
+
+                    object.visible = true
+
+                    if (object.ref) {
+                        object.ref.setNativeProps({
+                            "visible": false
+                        })
+                    }
+
+                    object.dynamicPosition = [object.position[0], object.position[1], object.position[2]]
+                    object.dynamicScale = [object.scale[0], object.scale[1], object.scale[2]]
+                    object.dynamicRotation = [object.rotation[0], object.rotation[1], object.rotation[2]]
+                }
+            }
+            else if (showObjects2) {
+                setShowObjects2((prev) => !prev)
+                setShowObjects3((prev) => !prev)
+
+                for (let o in objects1) {
+                    const object = objects1[o]
+
+                    object.visible = true
+
+                    if (object.ref) {
+                        object.ref.setNativeProps({
+                            "visible": false
+                        })
+                    }
+
+                    object.dynamicPosition = [object.position[0], object.position[1], object.position[2]]
+                    object.dynamicScale = [object.scale[0], object.scale[1], object.scale[2]]
+                    object.dynamicRotation = [object.rotation[0], object.rotation[1], object.rotation[2]]
+                }
+
+            }
+            else if (showObjects3) {
+                setShowObjects3((prev) => !prev)
+                setShowObjects1((prev) => !prev)
+
+                for (let o in objects2) {
+                    const object = objects2[o]
+
+                    object.visible = true
+
+                    if (object.ref) {
+                        object.ref.setNativeProps({
+                            "visible": false
+                        })
+                    }
+
+                    object.dynamicPosition = [object.position[0], object.position[1], object.position[2]]
+                    object.dynamicScale = [object.scale[0], object.scale[1], object.scale[2]]
+                    object.dynamicRotation = [object.rotation[0], object.rotation[1], object.rotation[2]]
+                }
+            }
+        }, 15000)
+
+        return () => {
+            clearInterval(switchInterval)
+        }
+    }, [])
 
     const getVelocityLine = (startPosition, endPosition, speed) => {
 
@@ -102,6 +194,13 @@ const FloatFireSceneAR = (props) => {
         })
     }
 
+    const guidGenerator = () => {
+        var S4 = function () {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4())
+    }
+
     const onInitialized = (state, reason) => {
 
     }
@@ -130,11 +229,50 @@ const FloatFireSceneAR = (props) => {
         }
     }
 
-    const onCollision = (tag, b, c) => {
-        console.log('Collision', tag, b, c)
+    const resetObject = (object) => {
+        if (object) {
+            if (object.ref) {
+                object.visible = false
+                object.currentHits = 1
 
-        if (viroProps.onCollision) {
-            viroProps.onCollision(0)
+                object.id = guidGenerator()
+                object.dynamicPosition = [object.position[0], object.position[1], object.position[2]]
+
+                object.ref.setNativeProps({
+                    "visible": false
+                })
+            }
+        }
+    }
+
+    const findObject = (tag) => {
+
+        const combinedObjects = [].concat(objects1).concat(objects2).concat(objects3)
+
+        for (const o in combinedObjects) {
+            const object = combinedObjects[o]
+            if (object.tag === tag) {
+                return object
+            }
+        }
+
+        return null
+    }
+
+    const onCollision = (tag) => {
+        let object = findObject(tag)
+
+        if (object && !!object.maxHits) {
+            console.log('object hit', object.tag, object.currentHits)
+            object.currentHits++
+
+            if (object.currentHits >= object.maxHits) {
+                resetObject(object)
+
+                if (viroProps.onCollision) {
+                    viroProps.onCollision(0)
+                }
+            }
         }
     }
 
@@ -147,26 +285,70 @@ const FloatFireSceneAR = (props) => {
 
             {state.foundAnchor && (
                 <ViroARPlane anchorId={state.foundAnchor}>
-
                     <ViroAmbientLight color={"#bbb"} />
                     <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
 
                     {
-                        objects.current.map(o =>
-                            <ViroNode key={o.tag}>
+                        showObjects1 && objects1.map(o =>
+                            <ViroNode key={o.id}>
                                 <Viro3DObject
                                     viroTag={o.tag}
                                     ref={(ref) => o.ref = ref}
                                     source={{
                                         uri: o.uri
                                     }}
-                                    position={o.position}
-                                    scale={o.scale}
-                                    rotation={o.rotation}
+                                    position={o.dynamicPosition}
+                                    scale={o.dynamicScale}
+                                    rotation={o.dynamicRotation}
                                     type="VRX"
                                     dragType="FixedToPlane"
                                     physicsBody={o.physics}
                                     animation={o.animation}
+                                    visible={o.visible}
+                                />
+                            </ViroNode>
+                        )
+                    }
+
+                    {
+                        showObjects2 && objects2.map(o =>
+                            <ViroNode key={o.id}>
+                                <Viro3DObject
+                                    viroTag={o.tag}
+                                    ref={(ref) => o.ref = ref}
+                                    source={{
+                                        uri: o.uri
+                                    }}
+                                    position={o.dynamicPosition}
+                                    scale={o.dynamicScale}
+                                    rotation={o.dynamicRotation}
+                                    type="VRX"
+                                    dragType="FixedToPlane"
+                                    physicsBody={o.physics}
+                                    animation={o.animation}
+                                    visible={o.visible}
+                                />
+                            </ViroNode>
+                        )
+                    }
+
+                    {
+                        showObjects3 && objects3.map(o =>
+                            <ViroNode key={o.id}>
+                                <Viro3DObject
+                                    viroTag={o.tag}
+                                    ref={(ref) => o.ref = ref}
+                                    source={{
+                                        uri: o.uri
+                                    }}
+                                    position={o.dynamicPosition}
+                                    scale={o.dynamicScale}
+                                    rotation={o.dynamicRotation}
+                                    type="VRX"
+                                    dragType="FixedToPlane"
+                                    physicsBody={o.physics}
+                                    animation={o.animation}
+                                    visible={o.visible}
                                 />
                             </ViroNode>
                         )
