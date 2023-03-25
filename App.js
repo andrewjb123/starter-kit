@@ -3,6 +3,7 @@ import { View, StyleSheet, PixelRatio, Dimensions, TouchableOpacity, Text } from
 import { ViroARSceneNavigator } from '@viro-community/react-viro'
 import FloatFireScene from './scenes/FloatFireScene'
 import FloatWindScene from './scenes/FloatWindScene'
+import GiveItemsScene from './scenes/GiveItemsScene'
 
 export default function ARControl(props) {
 
@@ -452,6 +453,21 @@ export default function ARControl(props) {
     ]
   }
 
+  const gameProps3 = {
+    hasCrossHair: false,
+    hasFireButton: false,
+    materials: {
+      ball: {
+        lightingModel: "Blinn",
+        diffuseColor: '#000'
+      },
+      floor: {
+        lightingModel: "Blinn",
+        diffuseColor: '#fff'
+      }
+    },
+  }
+
 
   const [state, setState] = useState({
     initialised: false
@@ -467,7 +483,7 @@ export default function ARControl(props) {
 
   const [appProps, setAppProps] = useState({
     fireButton: null,
-    gameProps: gameProps1,
+    gameProps: gameProps3,
     onFireButtonAssigned: onFireButtonAssigned,
     onCollision: onCollision
   })
@@ -478,17 +494,17 @@ export default function ARControl(props) {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{
-          scene: FloatFireScene,
+          scene: GiveItemsScene,
         }}
         viroAppProps={appProps}
         style={styles.container}
       />
 
-      {state.initialised && <TouchableOpacity style={styles.fireButton} onPress={() => { if (appProps.fireButton) appProps.fireButton() }}>
+      {state.initialised && appProps.gameProps.hasFireButton && <TouchableOpacity style={styles.fireButton} onPress={() => { if (appProps.fireButton) appProps.fireButton() }}>
 
       </TouchableOpacity>}
 
-      <View style={styles.crossHair} />
+      {state.initialised && appProps.gameProps.hasCrossHair && <View style={styles.crossHair} />}
     </View>
   )
 }
